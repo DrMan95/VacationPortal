@@ -8,7 +8,7 @@ const CreateUser = () => {
     const [password, setPassword] = useState('')
     const [passwordC, setPasswordC] = useState('')
     const [type, setType] = useState('')
-    const {create, isLoading, error} = useCreate()
+    const {create, isLoading, error, emptyFields} = useCreate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -25,24 +25,28 @@ const CreateUser = () => {
                 type = 'text'
                 onChange = {(e) => setFirstName(e.target.value)}
                 value = {firstName}
+                className = {emptyFields.includes('firstName') ? 'error' : ''}
             />
             <label>Last Name</label>
             <input
                 type = 'text'
                 onChange = {(e) => setLastName(e.target.value)}
                 value = {lastName}
+                className = {emptyFields.includes('lastName') ? 'error' : ''}
             />
             <label>Email</label>
             <input
                 type = 'email'
                 onChange = {(e) => setEmail(e.target.value)}
                 value = {email}
+                className = {emptyFields.includes('email') ? 'error' : ''}
             />
             <label>Password</label>
             <input
                 type = 'password'
                 onChange = {(e) => setPassword(e.target.value)}
                 value = {password}
+                className = {emptyFields.includes('password') ? 'error' : ''}
             />
             <label>Confirm Password</label>
             <input
@@ -55,6 +59,7 @@ const CreateUser = () => {
                 type = 'text'
                 onChange = {(e) => setType(e.target.value)}
                 value = {type}
+                className = {emptyFields.includes('type') ? 'error' : ''}
             />
             <button disabled={isLoading}>Create</button>
             {error && <div className="error">{error}</div>}

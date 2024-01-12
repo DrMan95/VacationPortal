@@ -17,22 +17,4 @@ router.delete('/deleteUser/:id', deleteUser)
 router.patch('/updateUser/:id', updateUser)
 
 
-
-
-
-
-
-
-
-router.post('/test', async (req, res) =>{
-    const {email, password} = req.body
-
-    try {
-        res.status(200).json({email, password})
-    } catch (error) {
-        res.status(400).json({error: error.message})
-    }
-})
-
-
 module.exports = router

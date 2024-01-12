@@ -28,14 +28,10 @@ const userSchema = new Schema({
     }
 }, { timestamps: true })
 
-
 //static singUp user 
 userSchema.statics.singUp = async function(firstName, lastName, email , password, type){
 
     //validation
-    if(!firstName || !lastName || !email || !password || !type){
-        throw Error('All fields must be filled')
-    }
     if(!validator.isEmail(email)){
         throw Error('Email is not valid')
     }
@@ -69,6 +65,28 @@ userSchema.statics.logIn = async function(email, password){
     if(!match){
         throw Error('Incorrect password')
     }
+    return user
+}
+
+userSchema.statics.update = async function(id, reqJson){
+    
+    const firstName = reqJson.firstName
+    const lastName = reqJson.lastName
+    const email = reqJson.email
+    const password = reqJson.password
+    const type = reqJson.type
+
+    if(!firstName || !lastName || !email || !password || !type){
+        throw Error('All fields must be filled')
+    }
+    if(!validator.isEmail(email)){
+        throw Error('Email is not valid')
+    }
+    if(!validator.isStrongPassword(password)){
+        throw Error('Password is not strong enough')
+    }
+    const user = await this.findByIdAndUpdate({_id: id}, {firstName, lastName, email, password, type})
+
     return user
 }
 

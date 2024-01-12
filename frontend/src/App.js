@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Navbar from './pages/Navbar'
+import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import CreateUser from './pages/CreateUser'
+import AllUsers from './pages/AllUsers'
+import Admin from './pages/Admin'
+import UpdateUser from './pages/UpdateUser'
 
 function App() {
   return (
@@ -23,6 +26,18 @@ function App() {
             <Route
               path='/admin/create'
               element={<CreateUser />}
+            />
+            <Route
+              path='/admin/allusers'
+              element={<AllUsers />}
+            />
+            <Route
+              path='/admin'
+              element={<Admin />}
+            />
+            <Route 
+              path='/admin/updateuser'
+              element={<UpdateUser />}
             />
           </Routes>
         </div>
