@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
-import { useUpdate } from '../hooks/useUpdate'
+import { useUpdateUser } from '../hooks/useUpdateUser'
 import { useNavigate } from "react-router-dom"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 const UpdateUser = () => {
 
-    const [user, setUser] = useState(null)
+    //const [user, setUser] = useState(null)
     const [id, setId] = useState(null)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -12,15 +13,21 @@ const UpdateUser = () => {
     const [password, setPassword] = useState('')
     const [passwordC, setPasswordC] = useState('')
     const [type, setType] = useState('')
-    const {update, isLoading, error, emptyFields} = useUpdate()
+    const {update, isLoading, error} = useUpdateUser()
+    const context = useAuthContext()
+    const user = context.user
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch('/api/user/getUser/' + localStorage.getItem('userID'))
+            const response = await fetch('/api/user/getUser/' + localStorage.getItem('userID'),{
+                headers:{
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
             const json = await response.json()
             if(response.ok){
-                setUser(json)
+                //setUser(json)
                 setId(json._id)
                 setFirstName(json.firstName)
                 setLastName(json.lastName)
@@ -28,72 +35,83 @@ const UpdateUser = () => {
                 setType(json.type)
             }
         }
-        fetchUser()
-    }, [])
+        if(user){
+            fetchUser()
+        }
+    },[user])
 
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        await update(firstName, lastName, email, password, type)
+    const handleSubmit = async () => {
+        if(await update(firstName, lastName, email, password, passwordC, type)){
+            navigate('/')
+        }
     }
     const handleDelete = async () => {
-        const response = await fetch('/api/user/deleteUser/' + id, {
-            method: 'DELETE'
-        })
+        if(user) {
+            await fetch('/api/user/deleteUser/' + id, {
+                method: 'DELETE',
+                headers:{
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            localStorage.setItem('userID', '')
+            navigate('/')
+        }
+    }
+    const handleBack = async () => {
         localStorage.setItem('userID', '')
-        navigate('/admin')
-      };
+        navigate('/')
+    }
 
     return (
-            <form className="createUser">
-                <h3>Update User</h3>
-
-                <label>First Name</label>
-                <input
-                    type = 'text'
-                    onChange = {(e) => setFirstName(e.target.value)}
-                    value = {firstName}
-                    className = {emptyFields.includes('firstName') ? 'error' : ''}
-                />
-                <label>Last Name</label>
-                <input
-                    type = 'text'
-                    onChange = {(e) => setLastName(e.target.value)}
-                    value = {lastName}
-                    className = {emptyFields.includes('lastName') ? 'error' : ''}
-                />
-                <label>Email</label>
-                <input
-                    type = 'email'
-                    onChange = {(e) => setEmail(e.target.value)}
-                    value = {email}
-                    className = {emptyFields.includes('email') ? 'error' : ''}
-                />
-                <label>Password</label>
-                <input
-                    type = 'password'
-                    onChange = {(e) => setPassword(e.target.value)}
-                    value = {password}
-                    className = {emptyFields.includes('password') ? 'error' : ''}
-                />
-                <label>Confirm Password</label>
-                <input
-                    type = 'password'
-                    onChange = {(e) => setPasswordC(e.target.value)}
-                    value = {passwordC}
-                />
-                <label>Type</label>
-                <input
-                    type = 'text'
-                    onChange = {(e) => setType(e.target.value)}
-                    value = {type}
-                    className = {emptyFields.includes('type') ? 'error' : ''}
-                />
-                <button disabled={isLoading} onClick={handleSubmit}>Update</button>
-                {error && <div className="error">{error}</div>}
-                <button className="deleteButton" onClick={handleDelete}>Delete</button>
-            </form>
+        <form className="userForm" onSubmit={handleSubmit}>
+            <h3>Update User</h3>
+            <label>First Name</label>
+            <input
+                type = 'text'
+                onChange = {(e) => setFirstName(e.target.value)}
+                value = {firstName}
+                required
+            />
+            <label>Last Name</label>
+            <input
+                type = 'text'
+                onChange = {(e) => setLastName(e.target.value)}
+                value = {lastName}
+                required
+            />
+            <label>Email</label>
+            <input
+                type = 'email'
+                onChange = {(e) => setEmail(e.target.value)}
+                value = {email}
+                required
+            />
+            <label>Password</label>
+            <input
+                type = 'password'
+                onChange = {(e) => setPassword(e.target.value)}
+                value = {password}
+                required
+            />
+            <label>Confirm Password</label>
+            <input
+                type = 'password'
+                onChange = {(e) => setPasswordC(e.target.value)}
+                value = {passwordC}
+                required
+            />
+            <label>Type</label>
+            <input
+                type = 'text'
+                onChange = {(e) => setType(e.target.value)}
+                value = {type}
+                required
+            />
+            <button disabled={isLoading}>Update</button>
+            {error && <div className="error">{error}</div>}
+            <button className="deleteButton" onClick={handleDelete}>Delete</button>
+            <button className="backButton" onClick={handleBack}>Back</button>
+        </form>
     )
 }
 

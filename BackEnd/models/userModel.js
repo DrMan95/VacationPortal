@@ -29,7 +29,7 @@ const userSchema = new Schema({
 }, { timestamps: true })
 
 //static singUp user 
-userSchema.statics.singUp = async function(firstName, lastName, email , password, type){
+userSchema.statics.singUp = async function(firstName, lastName, email , password, passwordC, type){
 
     //validation
     if(!validator.isEmail(email)){
@@ -37,6 +37,9 @@ userSchema.statics.singUp = async function(firstName, lastName, email , password
     }
     if(!validator.isStrongPassword(password)){
         throw Error('Password is not strong enough')
+    }
+    if(password != passwordC){
+        throw Error('Passwords are not equal')
     }
     const exist = await this.findOne({email})
     if (exist){
@@ -74,6 +77,7 @@ userSchema.statics.update = async function(id, reqJson){
     const lastName = reqJson.lastName
     const email = reqJson.email
     const password = reqJson.password
+    const passwordC = reqJson.passwordC
     const type = reqJson.type
 
     if(!firstName || !lastName || !email || !password || !type){
@@ -81,6 +85,9 @@ userSchema.statics.update = async function(id, reqJson){
     }
     if(!validator.isEmail(email)){
         throw Error('Email is not valid')
+    }
+    if(password != passwordC){
+        throw Error('Passwords are not equal')
     }
     if(!validator.isStrongPassword(password)){
         throw Error('Password is not strong enough')

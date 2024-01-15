@@ -1,7 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 require('dotenv').config()
-const userRoutes = require('./routes/user')
+const userRoutes = require('./routes/userRoutes')
+const applicationRoutes = require('./routes/applicationRoutes')
 
 
 const app = express()
@@ -15,6 +16,8 @@ app.use((req, res, next) => {
 
 //routes
 app.use('/api/user', userRoutes)
+app.use('/api/application', applicationRoutes)
+
 app.get('/', (req , res) => {
     res.json({msg: 'wellcome'})
 })

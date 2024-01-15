@@ -1,8 +1,13 @@
+import { useAuthContext } from "../hooks/useAuthContext"
+import Employee from './Employee'
+import Admin from "./Admin"
+
 const Home = () => {
+    const context = useAuthContext()
+    const user = context.user
+    const type = user.type
     return (
-        <div className="home">
-            <h2>Home</h2>
-        </div>
+        type === 'employee' ? <Employee /> : <Admin />
     )
 }
 

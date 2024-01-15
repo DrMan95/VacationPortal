@@ -18,6 +18,7 @@ code {
     monospace;
 }
 
+
 /*Navbar*/
 .nav-bar {
   display: flex;
@@ -61,7 +62,7 @@ code {
 
 
 /* login and createUser forms */
-.login, .createUser {
+.login, .userForm {
   background-color: #fff;
   max-width: 400px;
   margin: 0 auto;
@@ -100,8 +101,8 @@ button:hover {
   background-color: #0056b3;
 }
 
-/*admin page*/
 
+/*admin page*/
 .tabs-container {
   background-color: #007bff;
   display: flex;
@@ -119,9 +120,6 @@ button:hover {
   margin: 0 10px; /* Adjust the margin to bring buttons closer together */
 }
 
-.tab-content {
-  padding: 20px;
-}
 
 /* user details component */
 .user-details-container {
@@ -177,6 +175,121 @@ button:hover {
 .deleteButton:hover {
   background-color: #c82333;
 }
+
+.backButton:hover {
+  background-color: #959595;
+}
+
+.backButton {
+  background-color: #929292;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+
+
+/*Applications page*/
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.applications-list h2 {
+  font-size: 28px;
+  color: #007bff;
+  margin-bottom: 40px;
+}
+.application {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.application p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.application p:first-child {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.application button:hover {
+  background-color: #c82333;
+}
+
+.application p.Pending {
+  color: orange;
+}
+.application p.Rejected {
+  color:red;
+}
+.application p.Approved {
+  color:green;
+}
+
+.application-form {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.application-form h2 {
+  font-size: 24px;
+  color: #007bff;
+  margin-bottom: 15px;
+}
+
+.application-form label {
+  margin-top: 10px;
+}
+
+.application-form input,
+.application-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.application-form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.application-form button:hover {
+  background-color: #0056b3;
+}
+
 
 input.error{
   border: 1px solid var(--error);

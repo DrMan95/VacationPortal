@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import AllUsers from './AllUsers'
-import CreateUser from './CreateUser'
+import { useState } from 'react'
+import AllUsers from '../tabs/AllUsers'
+import CreateUser from '../tabs/CreateUser'
 
 const Admin = () => {
   const [selectedTab, setSelectedTab] = useState('allUsers')
@@ -8,7 +8,6 @@ const Admin = () => {
   const handleTabChange = (tab) => {
     setSelectedTab(tab)
   }
-
 
   const renderContent = () => {
     if (selectedTab === 'allUsers') {
@@ -33,8 +32,6 @@ const Admin = () => {
       <div className="tab-content">{renderContent()}</div>
     </div>
   )
-
-
 }
 
 export default Admin
