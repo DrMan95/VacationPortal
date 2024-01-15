@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 const userRoutes = require('./routes/userRoutes')
 const applicationRoutes = require('./routes/applicationRoutes')
-
+const adminRoutes = require('./routes/adminRoutes')
 
 const app = express()
 
@@ -16,6 +16,7 @@ app.use((req, res, next) => {
 
 //routes
 app.use('/api/user', userRoutes)
+app.use('/api/admin', adminRoutes)
 app.use('/api/application', applicationRoutes)
 
 app.get('/', (req , res) => {

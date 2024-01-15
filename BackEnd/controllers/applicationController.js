@@ -22,6 +22,9 @@ const submitRequest = async (req, res) => {
                 pass: process.env.APP_EMAIL_PASSWORD
             }
         })
+
+        const approve_link = 'http://localhost:4000/api/admin/approveUserApplication/' + application._id
+        const reject_link = 'http://localhost:4000/api/admin/rejectUserApplication/' + application._id
         
         var mailOptions = {
             from: process.env.APP_EMAIL,
@@ -31,7 +34,9 @@ const submitRequest = async (req, res) => {
                     'Employee: ' + user.firstName + ' ' +user.lastName + ' has requested for some time off\n' +
                     'Starting on ' + dateFrom + ' and ending on ' + dateTo + '\n' +
                     'Stating the reason: \"' + reason + '\"\n' +
-                    'Click on one of the below links to approve or reject the application:\n{approve_link} - {reject_link}'
+                    'Click on one of the below links to approve or reject the application:\n' +
+                    approve_link + '\n' +
+                    reject_link
         }
         
         transporter.sendMail(mailOptions, function(error, info){
@@ -85,9 +90,9 @@ const deleteApplication = async (req, res) => {
     return res.status(200).json(application)
 }
 
-const updateApplication = async (req, res) => {
+const approveApplication = async (req, res) => {
     const {id} = req.params
-    const {status} = req.body
+    const status = 'Approved'
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).json({error: 'Application not found.'})
     }
@@ -95,7 +100,80 @@ const updateApplication = async (req, res) => {
     if(!application){
         return res.status(404).json({error: 'Application not found.'})
     }
-    return res.status(200).json(application)
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.APP_EMAIL,
+            pass: process.env.APP_EMAIL_PASSWORD
+        }
+    })
+
+    const user = await User.findById(application.user_id.valueOf())
+    const user_email = user.email
+    const submission_date = application.createdAt
+    
+    var mailOptions = {
+        from: process.env.APP_EMAIL,
+        to: user_email,
+        subject: 'New Vacations Application',
+        text:   `Dear employee,\n
+                Your supervisor has approved your application submitted on\n
+                ${submission_date}.`
+    }
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+        console.log(error);
+        } else {
+        console.log('Email sent: ' + info.response);
+        }
+    })
+
+    return res.status(200).json({message: 'Application approved successfully.'})
+}
+
+const rejectApplication = async (req, res) => {
+    const {id} = req.params
+    const status = 'Rejected'
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'Application not found.'})
+    }
+    const application = await Application.findByIdAndUpdate({_id: id}, {status})
+    if(!application){
+        return res.status(404).json({error: 'Application not found.'})
+    }
+    
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.APP_EMAIL,
+            pass: process.env.APP_EMAIL_PASSWORD
+        }
+    })
+
+    const user = await User.findById(application.user_id.valueOf())
+    const user_email = user.email
+    const submission_date = application.createdAt
+    
+    var mailOptions = {
+        from: process.env.APP_EMAIL,
+        to: user_email,
+        subject: 'New Vacations Application',
+        text:   `Dear employee,\n
+                Your supervisor has rejected your application submitted on\n
+                ${submission_date}.`
+    }
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+        console.log(error);
+        } else {
+        console.log('Email sent: ' + info.response);
+        }
+    })
+
+    return res.status(200).json({message: 'Application rejected successfully.'})
 }
 
 module.exports = {
@@ -103,5 +181,6 @@ module.exports = {
     getUserApplications,
     getApplication,
     deleteApplication,
-    updateApplication
+    approveApplication,
+    rejectApplication
 }

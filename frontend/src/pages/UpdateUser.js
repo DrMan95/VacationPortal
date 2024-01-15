@@ -20,7 +20,7 @@ const UpdateUser = () => {
     const navigate = useNavigate()
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch('/api/user/getUser/' + localStorage.getItem('userID'),{
+            const response = await fetch('/api/admin/getUser/' + localStorage.getItem('userID'),{
                 headers:{
                     'Authorization': `Bearer ${user.token}`
                 }
@@ -47,7 +47,7 @@ const UpdateUser = () => {
     }
     const handleDelete = async () => {
         if(user) {
-            await fetch('/api/user/deleteUser/' + id, {
+            await fetch('/api/admin/deleteUser/' + id, {
                 method: 'DELETE',
                 headers:{
                     'Authorization': `Bearer ${user.token}`

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext'
 
 import Navbar from './components/Navbar'
@@ -22,7 +22,7 @@ function App() {
             />
             <Route 
               path='/admin/updateuser'
-              element={<UpdateUser />}
+              element={user ? <UpdateUser />: <Login />}
             />
             {/*<Route
               path='/home'

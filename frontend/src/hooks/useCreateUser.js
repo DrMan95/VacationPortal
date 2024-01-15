@@ -15,7 +15,7 @@ export const useCreateUser = () => {
             setError('You must be logged in')
             return
         }
-        const response = await fetch('/api/user/create', {
+        const response = await fetch('/api/admin/createUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

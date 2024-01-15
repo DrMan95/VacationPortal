@@ -15,7 +15,7 @@ export const useUpdateUser = () => {
             setError('You must be logged in')
             return
         }
-        const response = await fetch('/api/user/updateUser/' + localStorage.getItem('userID'), {
+        const response = await fetch('/api/admin/updateUser/' + localStorage.getItem('userID'), {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
