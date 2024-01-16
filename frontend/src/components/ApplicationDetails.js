@@ -11,10 +11,10 @@ const Application = ({ application }) => {
 
   return (
     <div className="application">
-      <p><strong>Date Submitted: </strong>{submitedDate}</p>
-      <p><strong>Dates Requested: </strong>{startDate} to {endDate}</p>
-      <p><strong>Days Requested: </strong>{daysRequested(new Date(startDate), new Date(endDate))}</p>
-      <p className={application.status}><strong>Status: </strong>{application.status}</p>
+      <p>Date Submitted: <strong>{submitedDate}</strong></p>
+      <p>Dates Requested: <strong>{startDate} to {endDate}</strong></p>
+      <p>Days Requested: <strong>{daysRequested(new Date(startDate), new Date(endDate))}</strong></p>
+      <p >Status: <span className={application.status}>{application.status}</span></p>
     </div>
   )
 }

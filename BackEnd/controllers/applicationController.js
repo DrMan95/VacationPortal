@@ -30,15 +30,55 @@ const submitRequest = async (req, res) => {
             from: process.env.APP_EMAIL,
             to: process.env.ADMIN_EMAIL,
             subject: 'New Vacations Application',
-            text:   'Dear supervisor,\n' +
-                    'Employee: ' + user.firstName + ' ' +user.lastName + ' has requested for some time off\n' +
-                    'Starting on ' + dateFrom + ' and ending on ' + dateTo + '\n' +
-                    'Stating the reason: \"' + reason + '\"\n' +
-                    'Click on one of the below links to approve or reject the application:\n' +
-                    approve_link + '\n' +
-                    reject_link
+            html: `<!DOCTYPE html>
+                    <html lang="en">
+                        <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                            margin: 20px;
+                            }
+                        
+                            .button {
+                            display: inline-block;
+                            padding: 10px 20px;
+                            margin: 10px;
+                            text-align: center;
+                            text-decoration: none;
+                            background-color: #007bff;
+                            border-radius: 5px;
+                            }
+                            .button.approve {
+                            background-color: #4caf50;
+                            color: #fff;
+                            }
+                        
+                            .button.reject {
+                            background-color: #f44336;
+                            color: #fff;
+                            }
+                        
+                            .button:hover {
+                            background-color: #0056b3;
+                            }
+                        </style>
+                        <title>Vacation Request</title>
+                        </head>
+                        <body>
+                        <p>Dear supervisor,</p>
+                        <p>Employee: ${user.firstName} ${user.lastName} has requested for some time off</p>
+                        <p>Starting on ${dateFrom} and ending on ${dateTo}</p>
+                        <p>Stating the reason: "${reason}"</p>
+                        <p>Click on one of the below links to approve or reject the application:</p>
+                        <a class="button approve" href="${approve_link}">Approve</a>
+                        <a class="button reject" href="${reject_link}">Reject</a>
+                        </body>
+                    </html>`
         }
-        
+
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
             console.log(error);
@@ -71,7 +111,7 @@ const getApplication = async (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).json({error: 'Application not found.'})
     }
-    const application = await Application.findById(id)
+    const application = await Application.findById(id).sort({createdAt: -1})
     if(!application){
         return res.status(404).json({error: 'Application not found.'})
     }
@@ -173,7 +213,7 @@ const rejectApplication = async (req, res) => {
         }
     })
 
-    return res.status(200).json({message: 'Application rejected successfully.'})
+    return res.status(200).send('Application rejected successfully.')
 }
 
 module.exports = {

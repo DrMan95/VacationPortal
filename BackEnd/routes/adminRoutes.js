@@ -22,6 +22,4 @@ router.get('/getUser/:id', getUser)
 router.delete('/deleteUser/:id', deleteUser)
 router.patch('/updateUser/:id', updateUser)
 
-
-
 module.exports = router

@@ -12,7 +12,7 @@ const UpdateUser = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordC, setPasswordC] = useState('')
-    const [type, setType] = useState('')
+    const [type, setType] = useState('employee')
     const {update, isLoading, error} = useUpdateUser()
     const context = useAuthContext()
     const user = context.user
@@ -40,8 +40,9 @@ const UpdateUser = () => {
         }
     },[user])
 
-    const handleSubmit = async () => {
-        if(await update(firstName, lastName, email, password, passwordC, type)){
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if(await update(firstName, lastName, email, password, passwordC, type)) {
             navigate('/')
         }
     }
@@ -101,12 +102,13 @@ const UpdateUser = () => {
                 required
             />
             <label>Type</label>
-            <input
-                type = 'text'
-                onChange = {(e) => setType(e.target.value)}
-                value = {type}
-                required
-            />
+            <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+            >
+                <option value="employee">Employee</option>
+                <option value="admin">Admin</option>
+            </select>
             <button disabled={isLoading}>Update</button>
             {error && <div className="error">{error}</div>}
             <button className="deleteButton" onClick={handleDelete}>Delete</button>

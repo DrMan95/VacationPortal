@@ -61,7 +61,7 @@ userSchema.statics.logIn = async function(email, password){
     }
     const user = await this.findOne({email})
     if (!user){
-        throw Error('Incorrect email.')
+        throw Error('Incorrect email')
     }
 
     const match = await bcrypt.compare(password, user.password)
@@ -72,7 +72,6 @@ userSchema.statics.logIn = async function(email, password){
 }
 
 userSchema.statics.update = async function(id, reqJson){
-    
     const firstName = reqJson.firstName
     const lastName = reqJson.lastName
     const email = reqJson.email
@@ -86,13 +85,17 @@ userSchema.statics.update = async function(id, reqJson){
     if(!validator.isEmail(email)){
         throw Error('Email is not valid')
     }
-    if(password != passwordC){
-        throw Error('Passwords are not equal')
-    }
     if(!validator.isStrongPassword(password)){
         throw Error('Password is not strong enough')
     }
-    const user = await this.findByIdAndUpdate({_id: id}, {firstName, lastName, email, password, type})
+    if(password != passwordC){
+        throw Error('Passwords are not equal')
+    }
+    
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
+
+    const user = await this.findByIdAndUpdate({_id: id}, {firstName, lastName, email, password: hash, type})
 
     return user
 }

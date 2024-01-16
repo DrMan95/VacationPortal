@@ -1,25 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useCreateApplication } from '../hooks/useCreateApplication'
-import { useNavigate } from "react-router-dom"
 
 const CreateApplication = () => {
-  const [dateFrom, setDateFrom] = useState('')
-  const [dateTo, setDateTo] = useState('')
+  const [dateFrom, setDateFrom] = useState(new Date().toISOString().split('T')[0])
+  const [dateTo, setDateTo] = useState(new Date().toISOString().split('T')[0])
   const [reason, setReason] = useState('')
   const {create, isLoading, error} = useCreateApplication()
-  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (await create(dateFrom, dateTo, reason)) {
-      navigate('/')
+      window.location.reload(false);
     }
   }
 
   return (
     <form className="application-form" onSubmit={handleSubmit}>
       <h2>New Vacation Application</h2>
-      <label>Start Date:</label>
+      <label>Vacation start from:</label>
       <input
         type="date"
         min={new Date().toISOString().split('T')[0]}
@@ -28,7 +26,7 @@ const CreateApplication = () => {
         required
       />
 
-      <label>End Date:</label>
+      <label>Vacation end:</label>
       <input
         type="date"
         min={new Date().toISOString().split('T')[0]}

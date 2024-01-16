@@ -101,6 +101,16 @@ button:hover {
   background-color: #0056b3;
 }
 
+.userForm select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 
 /*admin page*/
 .tabs-container {
@@ -232,13 +242,16 @@ button:hover {
   background-color: #c82333;
 }
 
-.application p.Pending {
+.application span.Pending {
+  font-weight: bold;
   color: orange;
 }
-.application p.Rejected {
+.application span.Rejected {
+  font-weight: bold;
   color:red;
 }
-.application p.Approved {
+.application span.Approved {
+  font-weight: bold;
   color:green;
 }
 
@@ -293,4 +306,16 @@ button:hover {
 
 input.error{
   border: 1px solid var(--error);
+}
+
+.error{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: #ffefef;
+  border: 1px solid var(--error);
+  color: var(--error);
+  border-radius: 4px;
+  margin: 15px 0;
 }

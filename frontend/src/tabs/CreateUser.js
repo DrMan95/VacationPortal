@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { useCreateUser } from "../hooks/useCreateUser"
-import { useNavigate } from "react-router-dom"
 
 const CreateUser = () => {
     const [firstName, setFirstName] = useState('')
@@ -8,14 +7,13 @@ const CreateUser = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordC, setPasswordC] = useState('')
-    const [type, setType] = useState('')
+    const [type, setType] = useState('employee')
     const {create, isLoading, error} = useCreateUser()
-    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         if(await create(firstName, lastName, email, password, passwordC, type)){
-            navigate('/')
+            window.location.reload(false);
         }
     }
 
@@ -58,12 +56,13 @@ const CreateUser = () => {
                 required
             />
             <label>Type</label>
-            <input
-                type = 'text'
-                onChange = {(e) => setType(e.target.value)}
-                value = {type}
-                required
-            />
+            <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+            >
+                <option value="employee">Employee</option>
+                <option value="admin">Admin</option>
+            </select>
             <button disabled={isLoading}>Create</button>
             {error && <div className="error">{error}</div>}
         </form>

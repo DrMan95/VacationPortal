@@ -25,7 +25,7 @@ const AllUserApplications = () => {
         if (user) {
           fetchUserApplications()
         }
-    }, [user.id, user])
+    }, [user])
     return (
       <div className="applications-list">
         <h2>My Applications</h2>

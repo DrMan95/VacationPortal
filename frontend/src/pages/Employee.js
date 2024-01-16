@@ -25,7 +25,7 @@ const Employee = () => {
           My Applications
         </button>
         <button className="tab-button" onClick={() => handleTabChange('createApplication')}>
-          Create New
+          Submit Request
         </button>
       </div>
       <div className="tab-content">{renderContent()}</div>
