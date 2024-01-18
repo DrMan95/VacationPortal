@@ -1,10 +1,20 @@
 const { default: mongoose } = require('mongoose')
 const Application = require('../models/applicationModel')
 const User = require('../models/userModel')
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer')
+
+const validDates = (d1, d2) => {
+    let date1 = new Date(d1).getTime()
+    let date2 = new Date(d2).getTime()
+
+    return !(date1 > date2)
+}
 
 const submitRequest = async (req, res) => {
     const {dateFrom, dateTo, reason} = req.body
+    if (!validDates(dateFrom, dateTo)){
+        res.status(401).json({error: 'Not valid dates'})
+    }
     const user_id = req.user._id
     const user = await User.findById({ _id: user_id.valueOf()})
     const status = 'Pending'
